@@ -1,87 +1,65 @@
-# Welcome to React Router!
+# Recursive To-Do App
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A recursive To-Do application built with **Remix (React Router v7)**, **TypeScript**, **TailwindCSS**, and **Appwrite**.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Setup
+
+1.  **Clone the repository**.
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+3.  **Appwrite Setup**:
+    -   Create a project on [Appwrite Cloud](https://cloud.appwrite.io).
+    -   Copy `.env.example` to `.env` and fill in your Project ID, API Key, and Endpoint.
+    -   Run the setup script to create Database and Collection:
+        ```bash
+        node scripts/init-appwrite.js
+        ```
+        (Make sure to set env vars before running or inline them).
+
+4.  **Run Development Server**:
+    ```bash
+    npm run dev
+    ```
+
+5.  **Run Tests**:
+    Ensure you are in the `recursive-todo` directory.
+    ```bash
+    npm run test
+    ```
+
+## CI/CD Plan (DevOps Thought Exercise)
+
+To ensure quality and smooth deployment used in a production environment, I would implement the following CI/CD pipeline:
+
+### Pipeline Stages
+
+1.  **Lint & formatting**:
+    -   Run `eslint` and `prettier --check` to ensure code quality.
+    -   Ideally run strict type checking (`tsc --noEmit`).
+
+2.  **Test**:
+    -   Run Unit and Integration tests using `vitest`.
+    -   (Optional) E2E tests using **Playwright** against a staging environment (or mocked Appwrite).
+
+3.  **Build**:
+    -   Run `npm run build` to verify the application builds successfully.
+
+4.  **Deploy**:
+    -   **Staging**: Automatically deploy `develop` branch to a staging URL (e.g., Vercel Preview).
+    -   **Production**: Deploy `main` branch to production upon manual approval or successful merge.
+    -   **Appwrite Functions**: Deploy functions using Appwrite CLI (`appwrite deploy functions`) as part of the pipeline.
+
+### Tools
+
+-   **GitHub Actions**: Primary CI/CD runner. It integrates well with the repo and has actions for Node.js, Vercel, and Appwrite.
+-   **Vercel**: Hosting provider for the Remix frontend. Zero-config deployments.
+-   **Appwrite CLI**: For managing backend schema and function deployments programmatically.
 
 ## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+-   **Recursive Todo List**: Creating nested tasks infinitely.
+-   **Authentication**: Signup/Login via Appwrite.
+-   **Optimistic UI**: Fast interactions locally.
+-   **Security**: Server-side session validation.
