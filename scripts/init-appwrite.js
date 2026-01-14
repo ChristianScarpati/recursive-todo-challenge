@@ -39,7 +39,7 @@ const client = new Client()
 
 const databases = new Databases(client);
 
-const DB_ID = "todo-db";
+const DB_ID = process.env.APPWRITE_DATABASE_ID;
 const COLL_ID = "todos";
 
 async function main() {
@@ -49,8 +49,14 @@ async function main() {
             await databases.get(DB_ID);
             console.log("Database exists.");
         } catch {
-            console.log("Creating Database...");
-            await databases.create(DB_ID, "Todo DB");
+            // Only try to create if using default ID (not from env)
+            if (!process.env.APPWRITE_DATABASE_ID) {
+                console.log("Creating Database...");
+                await databases.create(DB_ID, "Todo DB");
+            } else {
+                console.error(`Database ${DB_ID} not found. Please check your APPWRITE_DATABASE_ID.`);
+                process.exit(1);
+            }
         }
 
         console.log("Checking Collection...");

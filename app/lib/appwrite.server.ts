@@ -4,7 +4,7 @@ export const APPWRITE_ENDPOINT = process.env.APPWRITE_ENDPOINT || "https://cloud
 export const APPWRITE_PROJECT = process.env.APPWRITE_PROJECT || "";
 export const APPWRITE_API_KEY = process.env.APPWRITE_API_KEY || "";
 
-export const APPWRITE_DB_ID = "todo-db";
+export const APPWRITE_DB_ID = process.env.APPWRITE_DATABASE_ID || "";
 export const APPWRITE_COLLECTION_ID = "todos";
 
 export function createAdminClient() {
