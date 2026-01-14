@@ -4,7 +4,8 @@ import { createSessionClient, APPWRITE_DB_ID, APPWRITE_COLLECTION_ID } from "../
 import { getSession, destroySession } from "../sessions.server";
 import { buildTree } from "../lib/utils";
 import { TodoItem, NewTodoForm } from "../components/TodoItem";
-import { Query, ID } from "node-appwrite";
+import { Query, ID, Databases } from "node-appwrite";
+import { deleteTodoCascade } from "../helper/deleteToCascade";
 
 export function meta({ }: Route.MetaArgs) {
   return [{ title: "My Tasks - Recursive Todo" }];
@@ -84,8 +85,15 @@ export async function action({ request }: Route.ActionArgs) {
       isCompleted: !todo.isCompleted
     });
   } else if (intent === "delete") {
+
     const todoId = formData.get("todoId") as string;
-    await databases.deleteDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, todoId);
+
+    const todo = await databases.getDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, todoId);
+    if (todo.userId !== user.$id) {
+      return { error: "Not allowed" };
+    }
+
+    await deleteTodoCascade(databases, APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, todoId, user.$id);
   }
 
   return { success: true };
@@ -113,7 +121,7 @@ export default function Home() {
           {tree.length === 0 ? (
             <p className="text-center text-gray-500 py-8">No tasks yet. Add one above!</p>
           ) : (
-            tree.length > 0 && tree.map(todo => (
+            tree.map(todo => (
               <TodoItem key={todo.$id} todo={todo} />
             ))
           )}
